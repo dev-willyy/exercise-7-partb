@@ -7,17 +7,16 @@ import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
-import { setBlogPosts, setNotification } from "./redux/actions/blogActions";
+import { setBlogPosts, setNotification, setSignedInUser } from "./redux/actions/blogActions";
 
 const App = () => {
     const notification = useSelector((state) => state.blogNotification.notification);
     const blogPosts = useSelector((state) => state.allblogPosts.blogs);
+    const signedInUser = useSelector((state) => state.loggedInUser.user);
     const dispatch = useDispatch();
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-
-    const [user, setUser] = useState(null);
 
     useEffect(() => {
         blogService.getAll().then((blogPosts) => dispatch(setBlogPosts(blogPosts)));
@@ -27,10 +26,10 @@ const App = () => {
         const loggedUserJSON = window.localStorage.getItem("loggedUser");
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON);
-            setUser(user);
+            dispatch(setSignedInUser(user));
             blogService.setToken(user.token);
         }
-    }, []);
+    }, [dispatch]);
 
     const sortBlog = blogPosts.sort((a, b) => b.likes - a.likes);
 
@@ -40,7 +39,7 @@ const App = () => {
             const user = await loginService.login({ username, password });
             window.localStorage.setItem("loggedUser", JSON.stringify(user));
             blogService.setToken(user.token);
-            setUser(user);
+            dispatch(setSignedInUser(user));
             setUsername("");
             setPassword("");
         } catch (error) {
@@ -112,7 +111,7 @@ const App = () => {
         }
     };
 
-    if (user === null) {
+    if (signedInUser === null) {
         return (
             <div className="max-h-screen grid grid-rows-10 gap-4 pt-[50px]">
                 <Notification message={notification} />
@@ -133,7 +132,7 @@ const App = () => {
                 <h2 className="text-4xl font-extrabold">Blogs</h2>
                 <div className="w-full grid grid-cols-3">
                     <p className="col-span-2 grid items-center justify-start text-xl text-blue-700 font-bold">
-                        {user.username} logged in
+                        {signedInUser.username} logged in
                     </p>
                     <div className="">
                         <button
