@@ -1,4 +1,4 @@
-const LoginForm = ({ username, password, handleSubmit, handleUsernameChange, handlePasswordChange }) => {
+function LoginForm({ username, password, handleSubmit, handleUsernameChange, handlePasswordChange }) {
     return (
         <main className="row-span-4 grid items-center justify-center">
             <div className="h-fit w-fit px-8 py-16 border-2 shadow-lg grid gap-4 rounded-lg">
@@ -32,7 +32,7 @@ const LoginForm = ({ username, password, handleSubmit, handleUsernameChange, han
                     <div className="pt-4 grid items-center justify-center">
                         <button
                             type="submit"
-                            className="border-2 border-blue-950 text-blue-700 text-lg px-8 hover:bg-blue-700 hover:text-white hover:font-bold py-2 rounded-lg"
+                            className="border-2 border-black hover:bg-white hover:text-blue-700 text-lg px-8 bg-blue-700 text-white font-bold py-2 rounded-lg"
                         >
                             login
                         </button>
@@ -41,6 +41,6 @@ const LoginForm = ({ username, password, handleSubmit, handleUsernameChange, han
             </div>
         </main>
     );
-};
+}
 
 export default LoginForm;
