@@ -20,6 +20,20 @@ const blogSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
+    comments: {
+        type: [
+            {
+                comment: {
+                    type: String,
+                },
+                author: {
+                    type: String,
+                    default: "Anonymous",
+                },
+            },
+        ],
+        default: [],
+    },
 });
 
 blogSchema.set("toJSON", {

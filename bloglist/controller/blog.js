@@ -31,8 +31,25 @@ blogsRouter.post("/", async (request, response, next) => {
         user.blogs = user.blogs.concat(savedBlog._id);
         await user.save();
         response.status(201).json(savedBlog);
-    } catch (e) {
-        next(e);
+    } catch (error) {
+        next(error);
+    }
+});
+
+blogsRouter.post("/:id/comments", async (request, response, next) => {
+    try {
+        const blog = await Blog.findById(request.params.id);
+
+        const newComment = {
+            comment: request.body.comment,
+            author: "Anonymous",
+        };
+
+        blog.comments.push(newComment);
+        const updatedBlog = await blog.save();
+        return response.status(201).json(updatedBlog);
+    } catch (error) {
+        next(error);
     }
 });
 
@@ -48,8 +65,8 @@ blogsRouter.delete("/:id", async (request, response, next) => {
         } else {
             response.status(401).json({ error: "Unauthorized user" });
         }
-    } catch (e) {
-        next(e);
+    } catch (error) {
+        next(error);
     }
 });
 

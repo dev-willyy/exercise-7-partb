@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function NavBar({ signedInUser, handleLogout }) {
+    const navigate = useNavigate();
+
     return (
         <header className="w-full h-20 bg-blue-600 fixed left-0 top-0">
             <nav className="w-[50%] h-full mx-auto text-white">
@@ -17,7 +19,10 @@ function NavBar({ signedInUser, handleLogout }) {
                     <li className="col-span-2 h-full grid items-center justify-center">
                         <Link to="/">
                             <button
-                                onClick={() => handleLogout()}
+                                onClick={() => {
+                                    navigate("/");
+                                    handleLogout();
+                                }}
                                 className="border-2 bg-white text-blue-700 text-lg px-8 hover:bg-blue-700 hover:text-white hover:font-bold py-2 rounded-lg"
                             >
                                 logout

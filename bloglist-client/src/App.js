@@ -26,6 +26,8 @@ function App() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
+    const [comment, setComment] = useState("");
+
     useEffect(() => {
         blogService.getAll().then((blogPosts) => dispatch(setBlogPosts(blogPosts)));
     }, [dispatch]);
@@ -123,6 +125,10 @@ function App() {
         }
     };
 
+    const handleAddComment = async (blogId, comment, setComment) => {
+        await blogService.addComment(blogId, comment, setComment);
+    };
+
     if (signedInUser === null) {
         return (
             <Router>
@@ -158,7 +164,7 @@ function App() {
                     element={
                         <main className="min-h-screen grid items-center justify-center">
                             <div className="max-w-[400px] grid gap-4 mt-20 border-2 border-black px-8 py-4 shadow-2xl rounded-lg">
-                                <h2 className="text-4xl font-extrabold">Blogs</h2>
+                                <h2 className="text-4xl font-extrabold">Blog app</h2>
                                 <div className="w-full grid grid-cols-3">
                                     <p className="col-span-2 grid items-center justify-start text-xl text-blue-700 font-bold">
                                         {signedInUser.username} logged in
@@ -192,7 +198,16 @@ function App() {
                 <Route
                     path="/blogs/:blogId"
                     element={
-                        <Blog blogPosts={blogPosts} signedInUser={signedInUser} handleLikeChange={handleLikeChange} />
+                        <Blog
+                            blogPosts={blogPosts}
+                            signedInUser={signedInUser}
+                            handleLikeChange={handleLikeChange}
+                            handleLogout={handleLogout}
+                            handleTextAreaChange={({ target }) => setComment(target.value)}
+                            comment={comment}
+                            setComment={setComment}
+                            handleAddComment={handleAddComment}
+                        />
                     }
                 />
                 <Route
